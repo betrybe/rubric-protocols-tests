@@ -3,7 +3,6 @@ const fs = require('fs');
 const puppeteer = require('puppeteer');
 //var execTerminal = require('child_process').exec, child;
 var spawn = require('child_process').spawn
-var shell = require('shelljs');
 
 const BASE_URL = 'http://localhost:4040/inspect/http';
 
@@ -20,8 +19,8 @@ function wait(time) {
     }
   }
 
-describe('Responder o IP do client', () => {
-    it('Será validado que ao acessar a url sera possível visualizar o ip do client', async (done) => {  
+describe('Criar um script utilizando o módulo net capaz de realizar um chamada HTTP a um server', () => {
+    it('Será validado que ao acessar a url sera possível visualizar o ip do clienttttt', async (done) => {  
         const instructions = fs.readFileSync('./instruction.json', 'utf8');
         const instructionsString = JSON.parse(instructions.toString());
         await ngrok.authtoken(instructionsString.token);
@@ -32,7 +31,7 @@ describe('Responder o IP do client', () => {
          const client = spawn('node', ['src/index.js', '&']);
          client.stdout.setEncoding('utf8');
          client.stdout.on('data', ()=>{done(); });
-         shell.exec('node src/index.js');
+  
       wait(2000);
       await page.goto(BASE_URL);
       wait(2000);
@@ -52,16 +51,12 @@ describe('Responder o IP do client', () => {
       //await ngrok.disconnect(); // stops all
       await ngrok.kill(); 
      // await browser.close();
-      //execNode.kill();
-     // wait(3000);
      client.stdout.on('close', (data)=>{
-       data.kill();
+        data.kill();
+        done(); });
+      client.stdout.on('exit', (data)=>{
+        data.kill();
        done(); });
-     client.stdout.on('exit', (data)=>{
-       data.kill();
-      done(); });
-     //client.kill();
-     //
-     wait(3000);
+      wait(3000);
     });
   });
