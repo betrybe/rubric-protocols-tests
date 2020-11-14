@@ -32,7 +32,7 @@ describe('Responder o IP do client', () => {
          const client = spawn('node', ['src/index.js', '&']);
          client.stdout.setEncoding('utf8');
          client.stdout.on('data', ()=>{done(); });
-         shell.exec('node src/index.js');
+        // shell.exec('node src/index.js');
       wait(2000);
       await page.goto(BASE_URL);
       wait(2000);
