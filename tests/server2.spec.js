@@ -49,12 +49,10 @@ function wait(time) {
       sleep(20000)
       await page.waitForSelector('a[target="_blank"]');
       const url =  await page.$$eval('a[target="_blank"]', (nodes) => nodes.map((n) => n.innerText));
-      console.log(url)
       newPage = await browser.newPage();
       sleep(20000)
-      console.log(url[1]);
       newPage.goto(url[1]);
-      console.log(url[1]);
+
       sleep(20000)
       await newPage.waitForSelector(dataTestid('city'));
       const textCity = await newPage.$$eval(dataTestid('city'), (nodes) => nodes.map((n) => n.innerText));
