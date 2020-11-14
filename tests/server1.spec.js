@@ -3,6 +3,7 @@ const fs = require('fs');
 const puppeteer = require('puppeteer');
 //var execTerminal = require('child_process').exec, child;
 var spawn = require('child_process').spawn
+var shell = require('shelljs');
 
 const BASE_URL = 'http://localhost:4040/inspect/http';
 
@@ -28,10 +29,10 @@ describe('Responder o IP do client', () => {
          browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage', '--window-size=1920,1080'], headless: true });
          page = await browser.newPage();
 
-         const client = spawn('node', ['src/index.js']);
-         client.stdout.setEncoding('utf8');
-         client.stdout.on('data', ()=>{ });
-  
+         //const client = spawn('node', ['src/index.js']);
+         //client.stdout.setEncoding('utf8');
+         //client.stdout.on('data', ()=>{ });
+         shell.exec('node src/index.js');
       wait(2000);
       await page.goto(BASE_URL);
       wait(2000);
@@ -53,7 +54,8 @@ describe('Responder o IP do client', () => {
      // await browser.close();
       //execNode.kill();
      // wait(3000);
-     client.kill();
-     wait(3000);
+     shell.exit(1);
+     //client.kill();
+     //wait(3000);
     });
   });
