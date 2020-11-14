@@ -1,7 +1,8 @@
 const ngrok = require('ngrok');
 const fs = require('fs');
 const puppeteer = require('puppeteer');
-var execTerminal = require('child_process').exec, child;
+//var execTerminal = require('child_process').exec, child;
+var spawn = require('child_process').spawn
 
 const BASE_URL = 'http://localhost:4040/inspect/http';
 
@@ -29,18 +30,20 @@ function wait(time) {
 
 
   describe('Responder informações extraídas através do IP do client', () => {
-  
     it('Será validado que as informações da localização do cliente serão exibidas na tela', async () => { 
         const instructions = fs.readFileSync('./instruction.json', 'utf8');
         const instructionsString = JSON.parse(instructions.toString());
 
-        await ngrok.authtoken(instructionsString.token);
-        const url2 = await ngrok.connect(8080);
-       browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage', '--window-size=1920,1080'], headless: true });
+       await ngrok.authtoken(instructionsString.token);
+       const url2 = await ngrok.connect(8080);
+       browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage', '--window-size=1920,1080'], headless: false });
        page = await browser.newPage();
     
-        var execNode = execTerminal('node src/index.js');
-      execNode.stdout.on('data', ()=>{ });
+      //var execNode = execTerminal('node src/index.js');
+      const client = spawn('node', ['src/index.js']);
+      client.stdout.setEncoding('utf8');
+      client.stdout.on('data', ()=>{ });
+
       sleep(20000)
       await page.goto(BASE_URL);
       sleep(20000)
@@ -70,9 +73,7 @@ function wait(time) {
       expect(textCountry).not.toBeNull();
       expect(textCompany).not.toBeNull();
 
-      await ngrok.disconnect(url2); // stops one
-      await ngrok.disconnect(); // stops all
       await ngrok.kill(); 
-      execNode.kill();
+      client.kill();
     });
   });
