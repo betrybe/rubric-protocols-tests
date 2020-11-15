@@ -82,7 +82,7 @@ describe('Responder o IP do client', () => {
     const instructionsString = JSON.parse(instructions.toString());
     await ngrok.authtoken(instructionsString.token);
     await ngrok.connect(8080);
-    browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage', '--window-size=1920,1080'], headless: false });
+    browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage', '--window-size=1920,1080'], headless: true });
     page = await browser.newPage();
 
     const client = execTerminal('node src/index.js &');
